@@ -9,6 +9,7 @@ Install OSPSuite tools and Qualification Framework based on csv file input
   uses: pchelle/osp-actions/setup-qualification-environment@main
   with:
     tools-path: tools.csv
+    from-cache: true
 ```
 
 > [!TIP]
