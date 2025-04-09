@@ -129,11 +129,32 @@ runs:
         workingDirectory <- normalizePath("${{ inputs.snapshot }}", winslash = "/")
         reportPath <- file.path(workingDirectory, "${{ inputs.snapshot }}_evaluation_report.md")
         # Convert to html using css
-        knitr::pandoc(reportPath, paste("html", "--embed-resources", "--standalone", "-c \"osp.css\""))
-        webshot2::webshot(
-          url = gsub(pattern = ".md", ".html", reportPath),
-          file = gsub(pattern = ".md", ".pdf", reportPath)
+        knitr::pandoc(
+          reportPath, 
+          paste(
+            "html", 
+            "--embed-resources", 
+            "--standalone", 
+            "--quiet",
+            "-c \"osp.css\"",
+            "-f gfm+tex_math_dollars"
+            )
+          )
+        cmdLine <- paste(
+          'chromehtml2pdf',
+          paste0('--out="', gsub(pattern = ".md", ".pdf", reportPath), '"'),
+          "--displayHeaderFooter true",
+          "--format A4",
+          "--printBackground true",
+          "--marginTop 10mm",
+          "--marginBottom 10mm",
+          "--marginLeft 10mm",
+          "--marginRight 10mm",
+          '--headerTemplate "<span></span>"',
+          '--footerTemplate "<p style=\\"text-align: center; margin: auto; font-size: 10px;\\"><span class=\\"pageNumber\\"></span>/<span class=\\"totalPages\\"></span></p>"',
+          paste0('"', gsub(pattern = ".md", ".html", reportPath), '"')
         )
+        system(cmdLine)
       shell: Rscript {0}
 
     - id: save-model-files
