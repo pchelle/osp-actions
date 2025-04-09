@@ -28,14 +28,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: print
-      run: |
-        echo "${{ inputs.from-cache }}"
-        echo "inputs.from-cache"
-      shell: bash
-      
     - id: install-from-cache
-      if: ${{ inputs.from-cache }}
+      if: ( ${{ inputs.from-cache }} == 'true' )
       name: Set up environment from cache
       uses: actions/cache/restore@v4
       with:
