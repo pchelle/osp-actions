@@ -28,15 +28,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: print-hash
-      run: |
-        echo "${{ hashFiles(inputs.tools-path) }}"
-        echo "${{ hashFiles('inputs.tools-path') }}"
-        echo "${{ hashFiles(format(inputs.tools-path)) }}"
-        echo "${{ hashFiles(format('inputs.tools-path')) }}"
-        echo "${{ hashFiles('tools.csv') }}"
-      shell: bash
-    
     - id: install-from-cache
       if: ${{ inputs.from-cache }}
       name: Set up environment from cache
@@ -48,7 +39,7 @@ runs:
           **/npm
           **/Pandoc
           **/Program Files/R
-        key: cache-${{ hashFiles('inputs.tools-path') }}
+        key: cache-${{ hashFiles(inputs.tools-path) }}
     
     - id: install-chromehtml2pdf
       if: steps.install-from-cache.outputs.cache-hit != 'true'
