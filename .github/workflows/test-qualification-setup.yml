@@ -2,7 +2,11 @@ name: Test Qualification Environment Setup
 
 on:
   workflow_dispatch:
-
+    inputs:
+      from-cache:
+        type: boolean
+        description: Use cached setup if available
+  
 permissions: write-all
 
 jobs:
@@ -17,6 +21,7 @@ jobs:
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
           tools-path: tools.csv
+          from-cache: ${{ github.event.inputs.from-cache }}
 
       - id: print-output
         # Leverage installed environment
