@@ -70,12 +70,12 @@ runs:
         toolInstall <- function(packageInfo){
           # Case when install uses tag or branch
           if(is.na(packageInfo$url)){
-            isTagVersion <- grepl(pattern = "^\\d\\.\\d", packageInfo$version)
+            isTagVersion <- grepl(pattern = "^\\d+\\.\\d+", packageInfo$version)
             pak::pak(paste0(
               "Open-Systems-Pharmacology/", packageInfo$repo,
               "@", ifelse(isTagVersion, "v", ""), packageInfo$version
             ))
-            return()
+            return("Package installed")
           }
           # Case when install uses url
           download.file(packageInfo$url, destfile = packageInfo$zip, mode = "wb")
@@ -83,7 +83,7 @@ runs:
           unlink(packageInfo$zip)
           install.packages(list.files(pattern = "zip"), repos = NULL, type = "binary")
           unlink(list.files(pattern = "zip"))
-          return()
+          return("Package installed")
           }
           getPackageRepo <- function(toolName){
             switch(
