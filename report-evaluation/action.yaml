@@ -135,6 +135,7 @@ runs:
             "html", 
             "--embed-resources", 
             "--standalone", 
+            "--mathjax",
             "--quiet",
             "-c \"osp.css\"",
             "-f gfm+tex_math_dollars"
@@ -147,7 +148,7 @@ runs:
           "--format A4",
           "--printBackground true",
           "--marginTop 10mm",
-          "--marginBottom 10mm",
+          "--marginBottom 20mm",
           "--marginLeft 10mm",
           "--marginRight 10mm",
           '--headerTemplate "<span></span>"',
@@ -204,5 +205,9 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.snapshot }}-${{ inputs.model-version }}
-        path: ${{ inputs.snapshot }}
+        path: |
+          ${{ inputs.snapshot }}
+          !${{ inputs.snapshot }}/README.md
+          !${{ inputs.snapshot }}/Evaluation
+          !${{ inputs.snapshot }}/*.html
       
