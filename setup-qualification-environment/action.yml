@@ -31,9 +31,12 @@ runs:
     - id: install-from-cache
       if: ${{ inputs.from-cache }}
       name: Set up environment from cache
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
-        path: prime-numbers
+        path: |
+          ${{ env.RENV_PATHS_ROOT }}
+          QualificationRunner
+          PK-Sim
         key: cache-${{ hashFiles('${{ inputs.tools-path }}') }}
     
     - id: install-chromehtml2pdf
