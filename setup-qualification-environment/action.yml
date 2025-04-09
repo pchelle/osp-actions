@@ -34,10 +34,12 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: |
-          ${{ env.RENV_PATHS_ROOT }}
           QualificationRunner
           PK-Sim
-        key: cache-${{ hashFiles('${{ inputs.tools-path }}') }}
+          **/npm
+          **/Pandoc
+          **/Program Files/R
+        key: cache-${{ hashFiles('inputs.tools-path') }}
     
     - id: install-chromehtml2pdf
       if: steps.install-from-cache.outputs.cache-hit != 'true'
