@@ -55,17 +55,51 @@ runs:
         # Packages required to remotely install OSPSuite packages
         install.packages(c("remotes", "pak"), repos = 'http://cran.us.r-project.org', type='win.binary')
         print("CRAN Packages suggested and required by ospsuite-r")
-        install.packages(c('R6','rlang','dplyr','purrr','readr','tidyr','spelling','data.table','tidyselect','openxlsx','xml2'), repos = 'http://cran.us.r-project.org', type='win.binary')
+        pak::pak(c('R6','rlang','dplyr','purrr','readr','tidyr','spelling','data.table','tidyselect','openxlsx','xml2'))
         print("CRAN Packages suggested and required by tlf")
-        install.packages(c('stringr','gridtext','ggtext','showtext','rsvg','svglite','cowplot'), repos = 'http://cran.us.r-project.org', type='win.binary')
+        pak::pak(c('stringr','gridtext','ggtext','showtext','rsvg','svglite','cowplot'))
         print("CRAN Packages suggested and required by reporting engine")
-        install.packages(c('jsonlite','rmarkdown','knitr','parallel','readxl','Rmpi','webshot2'), repos = 'http://cran.us.r-project.org', type='win.binary')
+        pak::pak(c('jsonlite','rmarkdown','knitr','parallel','readxl','Rmpi'))
         # Following packages should not be needed c('testthat','covr','pkgdown')
       shell: Rscript {0}
     
     - id: install-ospsuite-tools
       name: Install OSPSuite tools
       run: |
+        # Function to install an R package in tools.csv
+        toolInstall <- function(packageInfo){
+          # Case when install uses tag or branch
+          if(is.na(packageInfo$url)){
+            isTagVersion <- grepl(pattern = "^\\d\\.\\d", packageInfo$version)
+            pak::pak(paste0(
+              "Open-Systems-Pharmacology/", packageInfo$repo,
+              "@", ifelse(isTagVersion, "v", ""), packageInfo$version
+            ))
+            return()
+          }
+          # Case when install uses url
+          download.file(packageInfo$url, destfile = packageInfo$zip, mode = "wb")
+          unzip(packageInfo$zip)
+          unlink(packageInfo$zip)
+          install.packages(list.files(pattern = "zip"), repos = NULL, type = "binary")
+          unlink(list.files(pattern = "zip"))
+          return()
+          }
+          getPackageRepo <- function(toolName){
+            switch(
+              toolName,
+              "RUtils" = "OSPSuite.RUtils",
+              "rClr" = "rClr",
+              "rSharp" = "rSharp",
+              "TLF" = "TLF-Library",
+              "ospsuite-R" = "OSPSuite-R",
+              "Reporting Engine" = "OSPSuite.ReportingEngine",
+              "PK-Sim" = "PK-Sim",
+              "Qualification Runner" = "QualificationRunner",
+              "Qualification Framework" = "QualificationFramework"
+            )
+          }
+          
         # Get the tools data and versions
         toolsData <- read.csv("${{ inputs.tools-path }}", stringsAsFactors = FALSE, colClasses = "character")
         toolsData <- sapply(
@@ -73,7 +107,9 @@ runs:
           function(toolName){
             list(
               version = toolsData$Version[toolsData$Tool %in% toolName], 
-              url = toolsData$URL[toolsData$Tool %in% toolName]
+              url = toolsData$URL[toolsData$Tool %in% toolName],
+              repo = getPackageRepo(toolName),
+              zip = paste0(toolName, ".zip")
             )
           }, 
           USE.NAMES = TRUE,
@@ -81,16 +117,7 @@ runs:
           )
         
         # RUtils
-        if(is.na(toolsData$RUtils$url)){
-          pak::pak(paste0("Open-Systems-Pharmacology/OSPSuite.RUtils@v", toolsData$RUtils$version))
-        }else{
-          download.file(toolsData$RUtils$url, destfile = "ospsuite.utils.zip", mode = "wb")
-          unzip("ospsuite.utils.zip")
-          unlink("ospsuite.utils.zip")
-          archivePath <- list.files(pattern = "ospsuite.*\\.zip")
-          install.packages(archivePath, repos = NULL, type = "binary")
-          unlink(archivePath)
-        }
+        toolInstall(toolsData$RUtils)
         # rClr
         if(is.na(toolsData$rClr$url)){
           if(!is.na(toolsData$rClr$version)){
@@ -108,40 +135,13 @@ runs:
           unzip("rClr.zip")
         }
         # rSharp
-        if(is.na(toolsData$rSharp$url)){
-          pak::pak(paste0("Open-Systems-Pharmacology/rSharp@v", toolsData$rSharp$version))
-        }else{
-          download.file(toolsData$rSharp$url, destfile = "rSharp.zip", mode = "wb")
-          unzip("rSharp.zip")
-          unlink("rSharp.zip")
-          archivePath <- list.files(pattern = "rSharp.*\\.zip")
-          install.packages(archivePath, repos = NULL, type = "binary")
-          unlink(archivePath)
-        }
+        toolInstall(toolsData$rSharp)
         # TLF
-        if(is.na(toolsData$TLF$url)){
-          pak::pak(paste0("Open-Systems-Pharmacology/TLF-Library@v", toolsData$TLF$version))
-        }else{
-          download.file(toolsData$TLF$url, destfile = "tlf.zip", mode = "wb")
-          install.packages("tlf.zip", repos = NULL, type = "binary")
-          unlink("tlf.zip")
-        }
+        toolInstall(toolsData$TLF)
         # OSPSuite
-        if(is.na(toolsData$`ospsuite-R`$url)){
-          pak::pak(paste0("Open-Systems-Pharmacology/OSPSuite-R@v", toolsData$`ospsuite-R`$version))
-        }else{
-          download.file(toolsData$`ospsuite-R`$url, destfile = "ospsuite.zip", mode = "wb")
-          install.packages("ospsuite.zip", repos = NULL, type = "binary")
-          unlink("ospsuite.zip")
-        }
+        toolInstall(toolsData$`ospsuite-R`)
         # Reporting Engine
-        if(is.na(toolsData$`Reporting Engine`$url)){
-          pak::pak(paste0("Open-Systems-Pharmacology/OSPSuite.ReportingEngine@v", toolsData$`Reporting Engine`$version))
-        }else{
-          download.file(toolsData$`Reporting Engine`$url, destfile = "ospsuite.reportingengine.zip", mode = "wb")
-          install.packages("ospsuite.reportingengine.zip", repos = NULL, type = "binary")
-          unlink("ospsuite.reportingengine.zip")
-        }
+        toolInstall(toolsData$`Reporting Engine`)
         # PK-Sim 
         if(is.na(toolsData$`PK-Sim`$url)){
           pkSimURL <- paste0(
