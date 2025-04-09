@@ -15,13 +15,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - id: tools-versions
+        name: Get tools versions
+        uses: pchelle/osp-actions/get-tools-versions@main
+        with:
+          tools-path: tools.csv
+      
+      - id: install-from-cache
+        if: ${{ inputs.from-cache }} == 'true'
+        name: Set up environment from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            QualificationRunner
+            PK-Sim
+            **/npm
+            **/Pandoc
+            **/Program Files/R
+          key: cache-${{ hashFiles('tools.csv') }}
+          # inputs.tools-path
         
       - id: qualification-environment
+        if: ${{ inputs.from-cache }} != 'true'
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
           tools-path: tools.csv
-          from-cache: ${{ github.event.inputs.from-cache }}
 
       - id: print-output
         # Leverage installed environment
@@ -29,9 +49,9 @@ jobs:
         run: |
           print(ospsuite.reportingengine::getReportingEngineInfo())
           print("Qualification Framework Version")
-          print("${{ steps.qualification-environment.outputs.qualification-framework-version }}")
+          print("${{ steps.tools-versions.outputs.qualification-framework }}")
           print("PK-Sim Version")
-          print("${{ steps.qualification-environment.outputs.pk-sim-version }}")
+          print("${{ steps.tools-versions.outputs.pk-sim }}")
         shell: Rscript {0}
 
       - id: print-table
