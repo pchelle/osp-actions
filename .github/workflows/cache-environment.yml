@@ -35,6 +35,7 @@ jobs:
             **/Pandoc
             **/Program Files/R
           key: cache-${{ hashFiles('tools.csv') }}
+          restore-keys: cache-${{ hashFiles('tools.csv') }}
         
       - id: print-output
         # Leverage installed environment
