@@ -1,0 +1,57 @@
+name: Cache Qualification Environment
+
+on:
+  workflow_dispatch:
+
+permissions: write-all
+
+jobs:
+  print-tools-table:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set RENV_PATHS_ROOT
+        run: |
+          echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
+        shell: bash
+        
+      - name: Install and activate renv
+        run: |
+          install.packages("renv")
+          renv::activate()
+        shell: Rscript {0}
+
+      - id: qualification-environment
+        name: Setup Qualification Environment
+        uses: pchelle/osp-actions/setup-qualification-environment@main
+        with:
+          tools-path: tools.csv
+
+      - id: cache
+        name: Cache renv and osp environement
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ env.RENV_PATHS_ROOT }}
+            QualificationRunner
+            PK-Sim
+          key: cache-${{ hashFiles('tools.csv') }}
+        
+      - id: print-output
+        # Leverage installed environment
+        name: Print output from previous step
+        run: |
+          print(ospsuite.reportingengine::getReportingEngineInfo())
+          print("Qualification Framework Version")
+          print("${{ steps.qualification-environment.outputs.qualification-framework-version }}")
+          print("PK-Sim Version")
+          print("${{ steps.qualification-environment.outputs.pk-sim-version }}")
+        shell: Rscript {0}
+
+      - id: print-table
+        name: Print output table from previous step
+        run: |
+          echo ${{ steps.tools-versions.outputs.tools-table  }}
+        shell: bash
