@@ -35,6 +35,7 @@ runs:
         echo "${{ hashFiles(format(inputs.tools-path)) }}"
         echo "${{ hashFiles(format('inputs.tools-path')) }}"
         echo "${{ hashFiles('tools.csv') }}"
+      shell: bash
     
     - id: install-from-cache
       if: ${{ inputs.from-cache }}
