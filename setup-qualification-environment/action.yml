@@ -28,6 +28,14 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: print-hash
+      run: |
+        echo "${{ hashFiles(inputs.tools-path) }}"
+        echo "${{ hashFiles('inputs.tools-path') }}"
+        echo "${{ hashFiles(format(inputs.tools-path)) }}"
+        echo "${{ hashFiles(format('inputs.tools-path')) }}"
+        echo "${{ hashFiles('tools.csv') }}"
+    
     - id: install-from-cache
       if: ${{ inputs.from-cache }}
       name: Set up environment from cache
