@@ -18,6 +18,11 @@ jobs:
         with:
           tools-path: tools.csv
 
+      - id: files
+        name: Check available files
+        run: |
+          ls
+      
       - id: cache
         name: Cache renv and osp environement
         # TODO: save R, npm and pandoc installations
@@ -26,6 +31,9 @@ jobs:
           path: |
             QualificationRunner
             PK-Sim
+            **/npm
+            **/Pandoc
+            **/Program Files/R
           key: cache-${{ hashFiles('tools.csv') }}
         
       - id: print-output
