@@ -167,7 +167,7 @@ ol:last-child {
     margin-bottom: 0;
 }
 blockquote {
-    border-left: 4px solid #dfe2e5;
+    border-left: 4px solid #b0b0b0;
     padding: 0 15px;
     color: #777777;
 }
@@ -188,7 +188,8 @@ table th {
   background-color: #f6f8fa;
   color: #333;
   padding: 10px;
-  border-bottom: 1px solid #dfe2e5;
+  border-top: 1px solid #b0b0b0;
+  border-bottom: 1px solid #b0b0b0;
   font-weight: bold;
 }
 
@@ -197,7 +198,7 @@ table td {
   background-color: #fff;
   color: #333;
   padding: 10px;
-  border-bottom: 1px solid #dfe2e5;
+  border-bottom: 1px solid #b0b0b0;
 }
 
 /* Alternate Row Coloring */
