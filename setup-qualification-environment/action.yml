@@ -24,6 +24,12 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: install-chromehtml2pdf
+      name: Install chromehtml2pdf for pdf conversion
+      run: |
+        npm install -g chromehtml2pdf
+      shell: bash
+      
     - id: install-pandoc
       if: ${{ inputs.install-pandoc }}
       name: Install Pandoc for html and word conversion
