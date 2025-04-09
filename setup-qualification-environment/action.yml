@@ -41,6 +41,14 @@ runs:
           **/Program Files/R
         key: cache-${{ hashFiles(inputs.tools-path) }}
     
+    - id: print
+      run: |
+        echo "steps.install-from-cache.outputs.cache-hit"
+        echo "${{ steps.install-from-cache.outputs.cache-hit }}"
+        echo "steps.install-from-cache.outputs.cache-hit != 'true'"
+        echo "${{ steps.install-from-cache.outputs.cache-hit }} != 'true'"
+      shell: bash
+      
     - id: install-chromehtml2pdf
       if: steps.install-from-cache.outputs.cache-hit != 'true'
       name: Install chromehtml2pdf for pdf conversion
