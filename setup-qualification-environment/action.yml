@@ -29,7 +29,7 @@ runs:
   using: "composite"
   steps:
     - id: install-from-cache
-      if: ( ${{ inputs.from-cache }} == 'true' )
+      if: inputs.from-cache }} == 'true'
       name: Set up environment from cache
       uses: actions/cache/restore@v4
       with:
