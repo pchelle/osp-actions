@@ -12,17 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set RENV_PATHS_ROOT
-        run: |
-          echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
-        shell: bash
-        
-      - name: Install and activate renv
-        run: |
-          install.packages("renv")
-          renv::activate()
-        shell: Rscript {0}
-
       - id: qualification-environment
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
@@ -31,11 +20,10 @@ jobs:
 
       - id: cache
         name: Cache renv and osp environement
-        # TODO: save npm and pandoc installations
+        # TODO: save R, npm and pandoc installations
         uses: actions/cache/save@v4
         with:
           path: |
-            ${{ env.RENV_PATHS_ROOT }}
             QualificationRunner
             PK-Sim
           key: cache-${{ hashFiles('tools.csv') }}
