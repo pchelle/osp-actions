@@ -2,6 +2,12 @@ name: Cache Qualification Environment
 
 on:
   workflow_dispatch:
+    inputs:
+      tools-path:
+        type: string
+        description: 'Path of csv file defining tools to install'
+        required: true
+        default: 'tools.csv'
 
 permissions: write-all
 
@@ -16,15 +22,15 @@ jobs:
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
-          tools-path: tools.csv
+          tools-path: ${{ inputs.tools-path }}
 
       - id: files
         name: Check available files
-        run: |
-          ls
+        run: ls
+        shell: bash
       
       - id: cache
-        name: Cache renv and osp environement
+        name: Cache Qualification Environement
         # TODO: save R, npm and pandoc installations
         uses: actions/cache/save@v4
         with:
@@ -34,22 +40,5 @@ jobs:
             **/npm
             **/Pandoc
             **/Program Files/R
-          key: cache-${{ hashFiles('tools.csv') }}
-          restore-keys: cache-${{ hashFiles('tools.csv') }}
-        
-      - id: print-output
-        # Leverage installed environment
-        name: Print output from previous step
-        run: |
-          print(ospsuite.reportingengine::getReportingEngineInfo())
-          print("Qualification Framework Version")
-          print("${{ steps.qualification-environment.outputs.qualification-framework-version }}")
-          print("PK-Sim Version")
-          print("${{ steps.qualification-environment.outputs.pk-sim-version }}")
-        shell: Rscript {0}
-
-      - id: print-table
-        name: Print output table from previous step
-        run: |
-          echo ${{ steps.tools-versions.outputs.tools-table  }}
-        shell: bash
+          key: cache-${{ hashFiles(inputs.tools-path) }}
+          restore-keys: cache-${{ hashFiles(inputs.tools-path) }}
