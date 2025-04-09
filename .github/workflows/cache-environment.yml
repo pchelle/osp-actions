@@ -31,7 +31,8 @@ jobs:
 
       - id: cache
         name: Cache renv and osp environement
-        uses: actions/cache@v4
+        # TODO: save npm and pandoc installations
+        uses: actions/cache/save@v4
         with:
           path: |
             ${{ env.RENV_PATHS_ROOT }}
