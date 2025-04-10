@@ -26,7 +26,9 @@ jobs:
 
       - id: files
         name: Check available files
-        run: ls
+        run: |
+          ls
+          ls ${{ runner.temp }}
         shell: bash
       
       - id: cache
