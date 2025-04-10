@@ -28,7 +28,7 @@ jobs:
         name: Check available files
         run: |
           ls
-          ls ${{ runner.temp }}
+          ls '${{ runner.temp }}'
         shell: bash
       
       - id: cache
