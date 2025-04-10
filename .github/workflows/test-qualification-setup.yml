@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       from-cache:
+        required: true
         type: boolean
         description: Use cached setup if available
   
@@ -23,7 +24,7 @@ jobs:
           tools-path: tools.csv
       
       - id: install-from-cache
-        if: ${{ inputs.from-cache }} == 'true'
+        if: ${{ inputs.from-cache }}
         name: Set up environment from cache
         uses: actions/cache/restore@v4
         with:
@@ -33,11 +34,11 @@ jobs:
             **/npm
             **/Pandoc
             **/Program Files/R
-          key: cache-${{ hashFiles('tools.csv') }}
+          key: ${{ hashFiles('tools.csv') }}
           # inputs.tools-path
         
       - id: qualification-environment
-        if: ${{ inputs.from-cache }} != 'true'
+        if: ${{ !( inputs.from-cache ) }}
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
