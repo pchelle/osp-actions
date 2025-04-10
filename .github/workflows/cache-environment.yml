@@ -40,5 +40,4 @@ jobs:
             **/npm
             **/Pandoc
             **/Program Files/R
-          key: cache-${{ hashFiles(inputs.tools-path) }}
-          restore-keys: cache-${{ hashFiles(inputs.tools-path) }}
+          key: ${{ hashFiles(inputs.tools-path) }}
