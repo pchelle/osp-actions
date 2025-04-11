@@ -25,12 +25,11 @@ jobs:
           tools-path: ${{ inputs.tools-path }}
 
       - id: files
-        name: Check available files
+        name: Check github paths
         run: |
-          ls
-          ls '${{ runner.tool_cache }}'
-          ls '${{ github.workspace }}'
-          ls 'C:/'
+          echo 'Runner tool cache: ${{ runner.tool_cache }}'
+          echo 'Github workspace: ${{ github.workspace }}'
+          echo 'Runner temp: ${{ runner.temp }}'
         shell: bash
       
       - id: cache
@@ -44,5 +43,6 @@ jobs:
             ${{ github.workspace }}/node_modules
             C:/Program Files/Pandoc
             ${{ runner.tool_cache }}/R
-            C:/Users/${{ env.USERNAME }}/Documents/R
+            ${{ runner.temp}}/Library
           key: ${{ hashFiles(inputs.tools-path) }}
+          # C:/Users/${{ env.USERNAME }}/Documents/R
