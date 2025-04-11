@@ -36,7 +36,7 @@ jobs:
       - id: tools-table
         name: Print markdown table of tools
         run: |
-          echo ${{ steps.tools-versions.outputs.tools-table  }}
+          echo '${{ steps.tools-versions.outputs.tools-table  }}'
         shell: bash
       
       - id: install-from-cache
