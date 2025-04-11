@@ -13,6 +13,15 @@ outputs:
   qualification-framework: 
     description: "Qualification framework version"
     value: ${{ steps.tools-versions.outputs.qualification-framework  }}
+  ospsuite-r: 
+    description: "OSPSuite-R package version"
+    value: ${{ steps.tools-versions.outputs.ospsuite-r  }}
+  reporting-engine: 
+    description: "OSPSuite.ReportingEngine R package version"
+    value: ${{ steps.tools-versions.outputs.reporting-engine  }}
+  tlf: 
+    description: "TLF-Library R package version"
+    value: ${{ steps.tools-versions.outputs.tlf  }}
   tools-table:
     description: "Markdown table corresponding to csv tools information"
     value: ${{ steps.tools-table.outputs.table  }}
@@ -46,6 +55,9 @@ runs:
         # Save PK sim and Qualifcation framework versions
         cat(toolsData$`PK-Sim`$version, file = "pk-sim-version.txt")
         cat(toolsData$`Qualification Framework`$version, file = "qualification-framework-version.txt")
+        cat(toolsData$`ospsuite-R`$version, file = "ospsuite-r-version.txt")
+        cat(toolsData$`Reporting Engine`$version, file = "reporting-engine-version.txt")
+        cat(toolsData$TLF$version, file = "tlf-version.txt")
       shell: Rscript {0}
     
     - id: save-tools-json
@@ -59,8 +71,14 @@ runs:
       run: |
         echo "pk-sim=$(cat pk-sim-version.txt)" >> $GITHUB_OUTPUT
         echo "qualification-framework=$(cat qualification-framework-version.txt)" >> $GITHUB_OUTPUT
+        echo "ospsuite-r=$(cat ospsuite-r-version.txt)" >> $GITHUB_OUTPUT
+        echo "reporting-engine=$(cat reporting-engine-version.txt)" >> $GITHUB_OUTPUT
+        echo "tlf=$(cat tlf.txt)" >> $GITHUB_OUTPUT
         rm pk-sim-version.txt
         rm qualification-framework-version.txt
+        rm ospsuite-r-version.txt
+        rm reporting-engine-version.txt
+        rm tlf-version.txt
       shell: bash
     
     - id: tools-data
