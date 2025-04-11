@@ -25,7 +25,7 @@ Run and report the tools and versions from `tools-path`.
 
 ## Inputs
 
-`tools-path`
+__`tools-path`__: Path a csv file defining the tools and versions to install
 
 ## Outputs
 
