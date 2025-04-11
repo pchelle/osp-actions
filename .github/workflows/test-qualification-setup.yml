@@ -50,7 +50,7 @@ jobs:
             ${{ github.workspace }}/node_modules
             C:/Program Files/Pandoc
             ${{ runner.tool_cache }}/R
-            C:/Users/${{ env.USERNAME }}/Documents/R
+            ${{ runner.temp}}/Library
           key: ${{ hashFiles('tools.csv') }}
           # inputs.tools-path
         
