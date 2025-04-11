@@ -22,6 +22,22 @@ jobs:
         uses: pchelle/osp-actions/get-tools-versions@main
         with:
           tools-path: tools.csv
+
+      - id: check-tools-versions
+        name: Check tools defined in tools.csv
+        run: |
+          echo 'PK-Sim version: ${{ steps.tools-versions.outputs.pk-sim  }}'
+          echo 'Qualification framework version: ${{ steps.tools-versions.outputs.qualification-framework  }}'
+          echo 'OSPSuite-R version: ${{ steps.tools-versions.outputs.ospsuite-r  }}'
+          echo 'Reporting Engine version: ${{ steps.tools-versions.outputs.reporting-engine  }}'
+          echo 'TLF version: ${{ steps.tools-versions.outputs.tlf  }}'
+        shell: bash
+
+      - id: tools-table
+        name: Print markdown table of tools
+        run: |
+          echo ${{ steps.tools-versions.outputs.tools-table  }}
+        shell: bash
       
       - id: install-from-cache
         if: ${{ inputs.from-cache }}
@@ -45,20 +61,8 @@ jobs:
         with:
           tools-path: tools.csv
 
-      - id: print-output
-        # Leverage installed environment
-        name: Print output from previous step
+      - id: test-environment-is-installed
+        name: Test environment is installed
         run: |
           print(ospsuite.reportingengine::getReportingEngineInfo())
-          print("Qualification Framework Version")
-          print("${{ steps.tools-versions.outputs.qualification-framework }}")
-          print("PK-Sim Version")
-          print("${{ steps.tools-versions.outputs.pk-sim }}")
         shell: Rscript {0}
-
-      - id: print-table
-        name: Print output table from previous step
-        run: |
-          echo ${{ steps.tools-versions.outputs.tools-table  }}
-        shell: bash
-        
