@@ -37,6 +37,18 @@ jobs:
         run: |
           ls '${{ runner.tool_cache }}'
         shell: bash
+
+      - id: runner-temp
+        name: Check tool cache
+        run: |
+          ls '${{ runner.temp }}'
+        shell: bash
+
+      - id: github-workspace
+        name: Check tool cache
+        run: |
+          ls '${{ github.workspace }}'
+        shell: bash
       
       - id: cache
         name: Cache Qualification Environement
@@ -46,7 +58,9 @@ jobs:
             QualificationRunner
             PK-Sim
             ${{ github.workspace }}/node_modules
-            ${{ runner.tool_cache }}
+            ${{ runner.tool_cache }}/R
+            ${{ runner.tool_cache }}/pandoc
+            ${{ runner.tool_cache }}/node
             ${{ runner.temp}}/Library
           key: ${{ hashFiles(inputs.tools-path) }}
           # C:/Users/${{ env.USERNAME }}/Documents/R
