@@ -31,6 +31,12 @@ jobs:
           echo 'Github workspace: ${{ github.workspace }}'
           echo 'Runner temp: ${{ runner.temp }}'
         shell: bash
+
+      - id: tool-cache
+        name: Check tool cache
+        run: |
+          ls '${{ runner.tool_cache }}'
+        shell: bash
       
       - id: cache
         name: Cache Qualification Environement
