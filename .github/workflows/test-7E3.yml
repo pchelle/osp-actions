@@ -2,6 +2,13 @@ name: Test 7E3 Model Evaluation
 
 on:
   workflow_dispatch:
+    inputs:
+      from-cache:
+        required: true
+        type: boolean
+        description: Use cached setup if available
+
+permissions: write-all
 
 jobs:
   test-report:
@@ -9,8 +16,46 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - id: tools-versions
+        name: Get tools versions
+        uses: pchelle/osp-actions/get-tools-versions@main
+        with:
+          tools-path: tools.csv
+
+      - id: check-tools-versions
+        name: Check tools defined in tools.csv
+        run: |
+          echo 'PK-Sim version: ${{ steps.tools-versions.outputs.pk-sim  }}'
+          echo 'Qualification framework version: ${{ steps.tools-versions.outputs.qualification-framework  }}'
+          echo 'OSPSuite-R version: ${{ steps.tools-versions.outputs.ospsuite-r  }}'
+          echo 'Reporting Engine version: ${{ steps.tools-versions.outputs.reporting-engine  }}'
+          echo 'TLF version: ${{ steps.tools-versions.outputs.tlf  }}'
+        shell: bash
+
+      - id: tools-table
+        name: Print markdown table of tools
+        run: |
+          echo '${{ steps.tools-versions.outputs.tools-table  }}'
+        shell: bash
+      
+      - id: install-from-cache
+        if: ${{ inputs.from-cache }}
+        name: Set up environment from cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            QualificationRunner
+            PK-Sim
+            ${{ github.workspace }}/node_modules
+            C:/Program Files/Pandoc
+            ${{ runner.tool_cache }}/R
+            ${{ runner.temp}}/Library
+          key: ${{ hashFiles('tools.csv') }}
+          # inputs.tools-path
         
       - id: qualification-environment
+        if: ${{ !( inputs.from-cache ) }}
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
@@ -23,9 +68,9 @@ jobs:
           model-repo: 7E3-Model
           model-version: '1.0'
           snapshot: '7E3'
-          pk-sim-version: ${{ steps.qualification-environment.outputs.pk-sim-version }}
-          qualification-framework-version: ${{ steps.qualification-environment.outputs.qualification-framework-version }}
-          save-model-file: FALSE
-          save-pdf: FALSE
-          save-artifact: TRUE
+          pk-sim-version: ${{ steps.tools-versions.outputs.pk-sim }}
+          qualification-framework-version: ${{ steps.tools-versions.outputs.qualification-framework }}
+          save-model-file: true
+          save-pdf: true
+          save-artifact: true
       
