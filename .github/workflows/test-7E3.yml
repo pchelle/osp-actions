@@ -48,8 +48,9 @@ jobs:
             QualificationRunner
             PK-Sim
             ${{ github.workspace }}/node_modules
-            C:/Program Files/Pandoc
             ${{ runner.tool_cache }}/R
+            ${{ runner.tool_cache }}/pandoc
+            ${{ runner.tool_cache }}/node
             ${{ runner.temp}}/Library
           key: ${{ hashFiles('tools.csv') }}
           # inputs.tools-path
