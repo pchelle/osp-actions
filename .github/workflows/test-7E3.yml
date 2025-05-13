@@ -35,7 +35,6 @@ jobs:
         shell: bash
       
       - id: qualification-environment
-        if: ${{ !( inputs.from-cache ) }}
         name: Setup Qualification Environment
         uses: pchelle/osp-actions/setup-qualification-environment@main
         with:
