@@ -2,11 +2,6 @@ name: Test 7E3 Model Evaluation
 
 on:
   workflow_dispatch:
-    inputs:
-      from-cache:
-        required: true
-        type: boolean
-        description: Use cached setup if available
 
 permissions: write-all
 
