@@ -39,10 +39,6 @@ inputs:
     description: 'Save evaluation report as word document'
     required: true
     default: false  
-outputs:
-  artifact-url:
-    description: 'URL of uploaded artifact'
-    value: ${{ steps.upload-report.outputs.artifact-url  }}
 
 runs:
   using: "composite"
