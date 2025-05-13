@@ -39,22 +39,6 @@ jobs:
           echo '${{ steps.tools-versions.outputs.tools-table  }}'
         shell: bash
       
-      - id: install-from-cache
-        if: ${{ inputs.from-cache }}
-        name: Set up environment from cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            QualificationRunner
-            PK-Sim
-            ${{ github.workspace }}/node_modules
-            ${{ runner.tool_cache }}/R
-            ${{ runner.tool_cache }}/pandoc
-            ${{ runner.tool_cache }}/node
-            ${{ runner.temp}}/Library
-          key: ${{ hashFiles('tools.csv') }}
-          # inputs.tools-path
-        
       - id: qualification-environment
         if: ${{ !( inputs.from-cache ) }}
         name: Setup Qualification Environment
@@ -73,5 +57,14 @@ jobs:
           qualification-framework-version: ${{ steps.tools-versions.outputs.qualification-framework }}
           save-model-file: true
           save-pdf: true
-          save-artifact: true
       
+      - id: upload-report
+        name: Upload the report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: '7E3-1.0'
+          path: |
+            7E3
+            !7E3/README.md
+            !7E3/Evaluation
+            !7E3/*.html
