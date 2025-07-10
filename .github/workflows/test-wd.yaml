@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  WORKING_DIR: 'D:/0'
+  WORKING_DIR: 'D:\0'
 
 jobs:
   print-tools-table:
