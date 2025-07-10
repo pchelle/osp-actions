@@ -1,4 +1,4 @@
-name: Test 7E3 Model Evaluation
+name: Test Download of 7E3 Model
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
           version: '1.0'
           extract-path: '7E3'
 
-      - id: Check if 
+      - id: check-outcome
         name: Check if download succeeded
         run: ls
         shell: bash
