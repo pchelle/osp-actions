@@ -23,7 +23,7 @@ runs:
     - id: download-unzip
       name: Download and unzip
       run: |
-        zipURL <- "{{ inputs.url }}"
+        zipURL <- "${{ inputs.url }}"
         if(nchar(zipURL)){
           download.file(zipURL, destfile = "archive.zip")
         } else {
