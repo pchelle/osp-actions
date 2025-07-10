@@ -3,14 +3,24 @@ name: Test Working Directory
 on:
   workflow_dispatch:
 
+env:
+  WORKING_DIR: 'D:/0'
+
 jobs:
-  dummy-job:
+  print-tools-table:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: D:/wd
+        working-directory: ${{ env.WORKING_DIR }}
     steps:
-      - name: Print current directory
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - id: files
+        name: Check github paths
         run: |
-          echo "This job was triggered manually!"
-          pwd
+          echo 'Github workspace: ${{ github.workspace }}'
+          ls '${{ github.workspace }}'
+          echo 'Runner temp: ${{ runner.temp }}'
+          ls '${{ runner.temp }}'
+        shell: bash
