@@ -28,8 +28,8 @@ runs:
           download.file(zipURL, destfile = "archive.zip")
         } else {
           # If version is provided, assess if it is a tag or a branch
-          isTag <- grepl(pattern = "[[:digit:]]\\.[[:digit:]]", x = "${{ input$version }}")
-          zipPath <- ifelse(isTag, "tags/v${{ input$version }}.zip", "heads/${{ input$version }}.zip")
+          isTag <- grepl(pattern = "[[:digit:]]\\.[[:digit:]]", x = "${{ inputs.version }}")
+          zipPath <- ifelse(isTag, "tags/v${{ inputs.version }}.zip", "heads/${{ inputs.version }}.zip")
           download.file(
             file.path("https://github.com/Open-Systems-Pharmacology/${{ inputs.repo }}/archive/refs", zipPath),
             destfile = "archive.zip"
