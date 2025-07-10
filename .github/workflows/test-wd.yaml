@@ -1,0 +1,16 @@
+name: Test Working Directory
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dummy-job:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: D:/wd
+    steps:
+      - name: Print current directory
+        run: |
+          echo "This job was triggered manually!"
+          pwd
