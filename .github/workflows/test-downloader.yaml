@@ -31,5 +31,5 @@ jobs:
         name: Check if download succeeded
         run: |
           ls
-          ls ${{ inputs.extract-path }}
+          ls 7E3
         shell: bash
