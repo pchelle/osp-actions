@@ -39,6 +39,7 @@ jobs:
         uses: pchelle/Workflows/.github/actions/setup-qualification-environment@101_pak_to_remotes
         with:
           tools-path: tools.csv
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
 
       - id: evaluate-model
         name: Run evaluation
