@@ -36,7 +36,7 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@101_pak_to_remotes
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@cowplot
         with:
           tools-path: tools.csv
 
