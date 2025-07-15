@@ -14,7 +14,7 @@ jobs:
 
       - id: tools-versions
         name: Get tools versions
-        uses: pchelle/osp-actions/get-tools-versions@main
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/get-tools-versions@main
         with:
           tools-path: tools.csv
 
@@ -36,21 +36,22 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: pchelle/osp-actions/setup-qualification-environment@main
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@101_pak_to_remotes
         with:
           tools-path: tools.csv
 
       - id: evaluate-model
         name: Run evaluation
-        uses: pchelle/osp-actions/report-evaluation@main
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/report-evaluation@main
         with:
-          model-repo: 7E3-Model
+          model-repo: '7E3-Model'
           model-version: '1.0'
           snapshot: '7E3'
           pk-sim-version: ${{ steps.tools-versions.outputs.pk-sim }}
           qualification-framework-version: ${{ steps.tools-versions.outputs.qualification-framework }}
-          save-model-file: true
-          save-pdf: true
+          save-model-file: 'true'
+          save-pdf: 'true'
+          run-directory: 'D:/0'
       
       - id: upload-report
         name: Upload the report artifact
@@ -58,7 +59,4 @@ jobs:
         with:
           name: '7E3-1.0'
           path: |
-            7E3
-            !7E3/README.md
-            !7E3/Evaluation
-            !7E3/*.html
+            D:/0/**
