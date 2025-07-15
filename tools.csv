@@ -1,6 +1,6 @@
 Tool,Version,URL
 ospsuite-R,12.2.0,NA
-Reporting Engine,main,NA
+Reporting Engine,main,pchelle/OSPSuite.ReportingEngine@cowplot
 RUtils,1.7.0,NA
 TLF,1.6.0,NA
 rClr,NA,NA
