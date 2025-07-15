@@ -5,6 +5,9 @@ on:
 
 permissions: write-all
 
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   test-report:
     runs-on: windows-latest
@@ -39,7 +42,6 @@ jobs:
         uses: pchelle/Workflows/.github/actions/setup-qualification-environment@101_pak_to_remotes
         with:
           tools-path: tools.csv
-          github-pat: ${{ secrets.GITHUB_TOKEN }}
 
       - id: evaluate-model
         name: Run evaluation
