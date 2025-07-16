@@ -19,7 +19,7 @@ jobs:
           r-version: '4.3.1'
           use-public-rspm: true
 
-      - id: check workspace
+      - id: check-workspace
         name: Check workspace path
         run: |
           Sys.getenv("GITHUB_WORKSPACE")
