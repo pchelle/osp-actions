@@ -19,6 +19,13 @@ jobs:
           r-version: '4.3.1'
           use-public-rspm: true
 
+      - id: check workspace
+        name: Check workspace path
+        run: |
+          Sys.getenv("GITHUB_WORKSPACE")
+          normalizePath(Sys.getenv("GITHUB_WORKSPACE"), winslash = "/")
+        shell: Rscript {0}
+      
       - id: download-7E3
         name: Download 7E3
         uses: pchelle/osp-actions/downloader@main
