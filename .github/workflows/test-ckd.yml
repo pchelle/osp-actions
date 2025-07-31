@@ -39,13 +39,13 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: Open-Systems-Pharmacology/Workflows/.github/actions/setup-qualification-environment@main
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@pk_sim_install
         with:
           tools-path: tools.csv
 
       - id: evaluate-model
         name: Run evaluation
-        uses: Open-Systems-Pharmacology/Workflows/.github/actions/report-evaluation@main
+        uses: pchelle/Workflows/.github/actions/report-evaluation@pk_sim_install
         with:
           model-repo: 'Qualification-CKD'
           model-version: '1.0'
