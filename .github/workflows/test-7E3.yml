@@ -39,13 +39,13 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@115_url_artifact
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@115_url_artifacts
         with:
           tools-path: tools.csv
 
       - id: evaluate-model
         name: Run evaluation
-        uses: pchelle/Workflows/.github/actions/report-evaluation@106_pdf_source_path
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/report-evaluation@main
         with:
           model-repo: '7E3-Model'
           model-version: '1.0'
