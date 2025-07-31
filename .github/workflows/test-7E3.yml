@@ -39,7 +39,7 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: Open-Systems-Pharmacology/Workflows/.github/actions/setup-qualification-environment@main
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@115_url_artifact
         with:
           tools-path: tools.csv
 
