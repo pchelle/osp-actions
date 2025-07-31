@@ -1,0 +1,66 @@
+name: Test QUalifcation-CKD Model Evaluation
+
+on:
+  workflow_dispatch:
+
+permissions: write-all
+
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test-report:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - id: tools-versions
+        name: Get tools versions
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/get-tools-versions@main
+        with:
+          tools-path: tools.csv
+
+      - id: check-tools-versions
+        name: Check tools defined in tools.csv
+        run: |
+          echo 'PK-Sim version: ${{ steps.tools-versions.outputs.pk-sim  }}'
+          echo 'Qualification framework version: ${{ steps.tools-versions.outputs.qualification-framework  }}'
+          echo 'OSPSuite-R version: ${{ steps.tools-versions.outputs.ospsuite-r  }}'
+          echo 'Reporting Engine version: ${{ steps.tools-versions.outputs.reporting-engine  }}'
+          echo 'TLF version: ${{ steps.tools-versions.outputs.tlf  }}'
+        shell: bash
+
+      - id: tools-table
+        name: Print markdown table of tools
+        run: |
+          echo '${{ steps.tools-versions.outputs.tools-table  }}'
+        shell: bash
+      
+      - id: qualification-environment
+        name: Setup Qualification Environment
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/setup-qualification-environment@main
+        with:
+          tools-path: tools.csv
+
+      - id: evaluate-model
+        name: Run evaluation
+        uses: Open-Systems-Pharmacology/Workflows/.github/actions/report-evaluation@main
+        with:
+          model-repo: 'Qualification-CKD'
+          model-version: '1.0'
+          snapshot: 'Qualification-CKD'
+          evaluation: 'false'
+          pk-sim-version: ${{ steps.tools-versions.outputs.pk-sim }}
+          qualification-framework-version: ${{ steps.tools-versions.outputs.qualification-framework }}
+          save-model-file: 'true'
+          save-pdf: 'true'
+          run-directory: 'D:/0'
+      
+      - id: upload-report
+        name: Upload the report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'Qualification-CKD-1.0'
+          path: |
+            D:/0/**
