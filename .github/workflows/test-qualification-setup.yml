@@ -19,7 +19,7 @@ jobs:
 
       - id: tools-versions
         name: Get tools versions
-        uses: pchelle/Workflows/actions/get-tools-versions@118_tools
+        uses: pchelle/Workflows/.github/actions/get-tools-versions@118_tools
         with:
           tools-path: tools.csv
 
@@ -42,7 +42,7 @@ jobs:
       
       - id: qualification-environment
         name: Setup Qualification Environment
-        uses: pchelle/Workflows/actions/setup-qualification-environment@118_tools
+        uses: pchelle/Workflows/.github/actions/setup-qualification-environment@118_tools
         with:
           tools-path: tools.csv
 
