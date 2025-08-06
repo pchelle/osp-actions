@@ -19,7 +19,7 @@ jobs:
 
       - id: tools-versions
         name: Get tools versions
-        uses: pchelle/osp-actions/get-tools-versions@main
+        uses: pchelle/Workflows/actions/get-tools-versions@118_tools
         with:
           tools-path: tools.csv
 
@@ -31,6 +31,7 @@ jobs:
           echo 'OSPSuite-R version: ${{ steps.tools-versions.outputs.ospsuite-r  }}'
           echo 'Reporting Engine version: ${{ steps.tools-versions.outputs.reporting-engine  }}'
           echo 'TLF version: ${{ steps.tools-versions.outputs.tlf  }}'
+          echo 'R version: ${{ steps.tools-versions.outputs.r  }}'
         shell: bash
 
       - id: tools-table
@@ -39,25 +40,9 @@ jobs:
           echo '${{ steps.tools-versions.outputs.tools-table  }}'
         shell: bash
       
-      - id: install-from-cache
-        if: ${{ inputs.from-cache }}
-        name: Set up environment from cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            QualificationRunner
-            PK-Sim
-            ${{ github.workspace }}/node_modules
-            C:/Program Files/Pandoc
-            ${{ runner.tool_cache }}/R
-            ${{ runner.temp}}/Library
-          key: ${{ hashFiles('tools.csv') }}
-          # inputs.tools-path
-        
       - id: qualification-environment
-        if: ${{ !( inputs.from-cache ) }}
         name: Setup Qualification Environment
-        uses: pchelle/osp-actions/setup-qualification-environment@main
+        uses: pchelle/Workflows/actions/setup-qualification-environment@118_tools
         with:
           tools-path: tools.csv
 
