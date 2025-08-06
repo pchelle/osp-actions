@@ -1,0 +1,19 @@
+name: Test Tools
+
+on:
+  workflow_dispatch:
+  
+permissions: write-all
+
+jobs:
+  print-tools-table:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - id: tools-versions
+        name: Get tools versions
+        uses: pchelle/Workflows/.github/actions/get-tools-versions@118_tools
+        with:
+          tools-path: tools.csv
