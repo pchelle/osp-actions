@@ -17,3 +17,20 @@ jobs:
         uses: pchelle/Workflows/.github/actions/get-tools-versions@118_tools
         with:
           tools-path: tools.csv
+
+      - id: show-tools-versions
+        name: Check tools defined in tools.csv
+        run: |
+          echo 'PK-Sim version: ${{ steps.tools-versions.outputs.pk-sim  }}'
+          echo 'Qualification framework version: ${{ steps.tools-versions.outputs.qualification-framework  }}'
+          echo 'OSPSuite-R version: ${{ steps.tools-versions.outputs.ospsuite-r  }}'
+          echo 'Reporting Engine version: ${{ steps.tools-versions.outputs.reporting-engine  }}'
+          echo 'TLF version: ${{ steps.tools-versions.outputs.tlf  }}'
+          echo 'R version: ${{ steps.tools-versions.outputs.r  }}'
+        shell: bash
+
+      - id: tools-table
+        name: Print markdown table of tools
+        run: |
+          echo '${{ steps.tools-versions.outputs.tools-table  }}'
+        shell: bash
