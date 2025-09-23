@@ -47,16 +47,10 @@ runs:
         # Default R version
         echo "r=latest" >> $GITHUB_OUTPUT
         # Add empty line to tools to read last line in case it does not exist
-        if [ "$(tail -c1 ${{ inputs.tools-path }} | wc -l)" -eq 0 ]; then
-          echo "Appending newline to ${{ inputs.tools-path }}"
-          echo >> "${{ inputs.tools-path }}"
-        fi
+        echo "\n" >> "${{ inputs.tools-path }}"
         # Process each line after header assumes columns are Name, Version and URL
         tail -n +2 "${{ inputs.tools-path }}" | while IFS=',' read -r val1 val2 val3
         do
-          echo "$val3"
-          val33=$(echo "$val3" | tr -d '\r\n')
-          echo "$val33"
           # Save versions corresponding to appropriate name
           if [[ "$val1" == "PK-Sim" ]]; then
             echo "pk-sim=$val2" >> $GITHUB_OUTPUT
