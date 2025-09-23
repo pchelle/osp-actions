@@ -83,6 +83,8 @@ runs:
     - id: tools-data
       name: Output tools data for table conversion
       run: |
+        sudo apt-get update
+        sudo apt-get install -y miller
         mlr --icsv --ojson cat "${{ inputs.tools-path }}" > tools.json
         echo "json=$(jq -c . tools.json)" >> $GITHUB_OUTPUT
       shell: bash
