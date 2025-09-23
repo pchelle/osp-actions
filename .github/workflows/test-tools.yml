@@ -14,7 +14,7 @@ jobs:
 
       - id: tools-versions
         name: Get tools versions
-        uses: pchelle/Workflows/.github/actions/get-tools-versions@main
+        uses: get-tools-versions@main
         with:
           tools-path: tools.csv
 
