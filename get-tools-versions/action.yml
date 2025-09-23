@@ -47,7 +47,7 @@ runs:
         # Default R version
         echo "r=latest" >> $GITHUB_OUTPUT
         # Process each line after header assumes columns are Name, Version and URL
-        tail -n +2 "${{ inputs.tools-path }}" | while IFS=',' read -r val1 val2 val3
+        tail -n +2 "${{ inputs.tools-path }}" | sed -e '$a\' | while IFS=',' read -r val1 val2 val3
         do
           # Save versions corresponding to appropriate name
           if [[ "$val1" == "PK-Sim" ]]; then
