@@ -54,8 +54,8 @@ runs:
       run: |
         # Default R version
         echo "r=latest" >> $GITHUB_OUTPUT
-        json=$(jq -c . tools.json)
-        echo "pk-sim=$json[[\"PK-Sim\"]]" >> $GITHUB_OUTPUT
+        json=${{ fromJSON(steps.tools-data.outputs.json) }}
+        echo "pk-sim=$json['PK-Sim']" >> $GITHUB_OUTPUT
         
         # Process each line after header assumes columns are Name, Version and URL
         tail -n +2 "${{ inputs.tools-path }}" | while IFS=',' read -r val1 val2 val3
