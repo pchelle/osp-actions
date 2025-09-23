@@ -41,19 +41,29 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: tools-data
+      name: Output tools data for table conversion
+      run: |
+        sudo apt-get install -y miller
+        mlr --icsv --ojson cat "${{ inputs.tools-path }}" > tools.json
+        echo "json=$(jq -c . tools.json)" >> $GITHUB_OUTPUT
+      shell: bash
+      
     - id: tools-versions
       name: Export versions of certain tools
       run: |
         # Default R version
         echo "r=latest" >> $GITHUB_OUTPUT
-        echo "\n" >> "${{ inputs.tools-path }}"
+        json=$(jq -c . tools.json)
+        echo "pk-sim=$json[[\"PK-Sim\"]]" >> $GITHUB_OUTPUT
+        
         # Process each line after header assumes columns are Name, Version and URL
         tail -n +2 "${{ inputs.tools-path }}" | while IFS=',' read -r val1 val2 val3
         do
           # Save versions corresponding to appropriate name
-          if [[ "$val1" == "PK-Sim" ]]; then
-            echo "pk-sim=$val2" >> $GITHUB_OUTPUT
-          fi
+          #if [[ "$val1" == "PK-Sim" ]]; then
+          #  echo "pk-sim=$val2" >> $GITHUB_OUTPUT
+          #fi
           if [[ "$val1" == "Qualification Framework" ]]; then
             echo "qualification-framework=$val2" >> $GITHUB_OUTPUT
           fi
@@ -81,14 +91,6 @@ runs:
         done
       shell: bash
       
-    - id: tools-data
-      name: Output tools data for table conversion
-      run: |
-        sudo apt-get install -y miller
-        mlr --icsv --ojson cat "${{ inputs.tools-path }}" > tools.json
-        echo "json=$(jq -c . tools.json)" >> $GITHUB_OUTPUT
-      shell: bash
-
     - id: tools-table
       name: Markdown table for tools
       uses: buildingcash/json-to-markdown-table-action@v1 
