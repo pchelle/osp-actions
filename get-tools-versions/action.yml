@@ -46,6 +46,7 @@ runs:
       run: |
         # Default R version
         echo "r=latest" >> $GITHUB_OUTPUT
+        echo "\n" >> "${{ inputs.tools-path }}"
         # Process each line after header assumes columns are Name, Version and URL
         tail -n +2 "${{ inputs.tools-path }}" | while IFS=',' read -r val1 val2 val3
         do
@@ -83,8 +84,8 @@ runs:
     - id: tools-data
       name: Output tools data for table conversion
       run: |
-        sudo apt-get update
-        sudo apt-get install -y miller
+        apt-get update
+        apt-get install -y miller
         mlr --icsv --ojson cat "${{ inputs.tools-path }}" > tools.json
         echo "json=$(jq -c . tools.json)" >> $GITHUB_OUTPUT
       shell: bash
