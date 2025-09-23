@@ -46,7 +46,7 @@ runs:
       run: |
         sudo apt-get install -y miller
         mlr --icsv --ojson cat "${{ inputs.tools-path }}" > tools.json
-        echo "json=$(jq -c . tools.json)" >> $GITHUB_OUTPUT
+        echo "json=$(cat tools.json)" >> $GITHUB_OUTPUT
       shell: bash
       
     - id: tools-versions
